@@ -94,6 +94,43 @@ The variance captured by the principal components quantifies how much informatio
 
 ![PCA Spatial Mode 1](README_PLOTS/pca_spatial_modes_all.png)
 
+### 4. Check with PARENTE
 
+Ah beh per questo bisogna che o aspetti o organizzi un meeting
 
+## 5. HOSVD (Higher-Order Singular Value Decomposition)
+
+### Methodology
+
+Unlike classical PCA which reshapes the tensor into a 2D matrix, HOSVD preserves the multi-dimensional structure of the combustion data. The 4D tensor (x, y, species, time) is decomposed using Tucker decomposition:
+
+```
+X ≈ G ×₁ U₁ ×₂ U₂ ×₃ U₃ ×₄ U₄
+```
+
+where:
+- **G** is the core tensor containing the interaction between all modes
+- **U₁, U₂** are the spatial factor matrices (x and y dimensions)
+- **U₃** is the chemical species factor matrix (U_chem in code)
+- **U₄** is the temporal factor matrix (U_time)
+
+The decomposition is computed by:
+1. Performing SVD on each mode unfolding of the tensor
+2. Computing the core tensor via multi-mode dot product (tensorly)
+3. The core tensor G captures the interactions between spatial patterns, chemical species, and temporal evolution
+
+### Reconstruction Accuracy
+
+The HOSVD decomposition achieves excellent reconstruction accuracy:
+- **Relative reconstruction error**: 2.00e-15 (stability)
+
+### Core Tensor Singular Values
+
+The core tensor singular values reveal the importance of each mode across different dimensions:
+
+![HOSVD Core Tensor Singular Values](README_PLOTS/hosvd_core_vals.png)
+
+- **Spatial Dimensions (X and Y)**: Show rapid decay, indicating that spatial patterns can be captured with relatively few modes
+- **Chemical Dimension**: This is the term of comparison (qua c'e' la ciccia, ma e' tardi e lo faccio domani)
+- **Time Dimension**: Shows distinct temporal mode importance, with the first few modes capturing most of the temporal dynamics
 
