@@ -7,10 +7,10 @@ The focus of the work is now comparing HOSVD to PCA in combustion. The methodolo
 2.  Define a preprocessing pipeline justitying all the choices made (almost done)
 3.  Perform classical PCA on the reshaped tensor (x * y * time, number of chemical species) (almost done)
 4.  Check the results of classical PCA with Parente 
-5.  Perform HOSVD and if necessary HOOI (HOPCA)
-6.  Check the results of HOSVD (HOOI/HOPCA)
+5.  Perform HOSVD and if necessary HOOI (HOPCA) (done)
+6.  Check the results of HOSVD (HOOI/HOPCA) (done)
 7.  Compare the results quantitatively -> reconstruction errors
-8.  Compare the resutls qualitatively -> do the PC mean something in both cases?
+8.  Compare the resutls qualitatively -> do the PC mean something in both cases? (almost done)
 9.  Draw some conclusions
 10. Run everything for real on CESVIMA
 11. Write the paper (this needs to be done while the code runs)
@@ -128,9 +128,19 @@ The HOSVD decomposition achieves excellent reconstruction accuracy:
 
 The core tensor singular values reveal the importance of each mode across different dimensions:
 
-![HOSVD Core Tensor Singular Values](README_PLOTS/hosvd_core_vals.png)
+![HOSVD Core Tensor Singular Values ](README_PLOTS/hosvd_core_vals.png)
+**CORE ** HOSVD core tensor singular values across spatial, chemical, and temporal modes.
 
 - **Spatial Dimensions (X and Y)**: Show rapid decay, indicating that spatial patterns can be captured with relatively few modes
 - **Chemical Dimension**: This is the term of comparison (qua c'e' la ciccia, ma e' tardi e lo faccio domani)
 - **Time Dimension**: Shows distinct temporal mode importance, with the first few modes capturing most of the temporal dynamics
+
+
+## (8.) Visual comparison between modes
+
+Although this point is not in exaclty rigorous yet, I think it is worth putting here to maybe get some feedback (speram). Although as per the above picture the information contained in the PCs is more than the one contained in the chemical modes of HOSVD, the HOSVD actually rapresent chemical species. PCs are just ficticious artifacts for compression, whereas HOSVD are interpretable and rooted in physical and chemical variation in modes.
+
+![PCA vs HOSVD modes dynamics](README_PLOTS/pca_vs_hosvd_comparison.gif)
+
+The PCA modes do not retain any spatial or temporal coherence. HOSVD on the other hand recovers structures which spatial and temporal modes are fully intact due to the fact that the truncation is performed only in chemical species
 
