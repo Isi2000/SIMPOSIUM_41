@@ -144,3 +144,11 @@ Although this point is not in exaclty rigorous yet, I think it is worth putting 
 
 The PCA modes do not retain any spatial or temporal coherence. HOSVD on the other hand recovers structures which spatial and temporal modes are fully intact due to the fact that the truncation is performed only in chemical species
 
+# ISSUE
+
+I have encountered some issues along the way, I am working on solving all of them in order. Some of them were "mistakes" on my part, other were delays due to numerical implementations of numpy reshape. I have finished the proof of the equivalence of HOSVD and PCA (i.e. PCA loadings (V) = U_chem, when unfolding and reshape done properly). Proof is almost trivial, I think I will write it after lunch properly (for now I will upload the photo).
+
+The above plot in which I was comparing hosvd and pca is fundamentally WRONG. I am plotting PCA modes and HOSVD reconstruction, so of course reconstructions look physical. It was too good to be true :(
+# Proof of equivalence in PC loadings between PCA and HOSVD
+
+![PCA vs HOSVD modes dynamics](./proof.jpeg)
