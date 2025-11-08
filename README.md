@@ -38,7 +38,7 @@ In order to have the code run fast and test without losing too much time transfe
 
 ### Mass to Molar Fraction Conversion
 
-Mass fractions are converted to molar fractions by dividing by species-specific molar masses, I wanna whatch the chemistry process, so I want moles. If I keep mass concentration the prevalent modes are not the species which are most involved in chemical reactions, but the heavier ones (learned this at my own expense :( )
+Mass fractions are converted to molar fractions by dividing by species-specific molar masses, I wanna watch the chemistry process, so I want moles. If I keep mass concentration the prevalent modes are not the species which are most involved in chemical reactions, but the heavier ones (learned this at my own expense :( )
 
 
 ### Data Processing
@@ -50,6 +50,14 @@ This stuff is really important because the results are higly dependent on it. Fo
 
 ![Proessed Data at Time Step 10](README_PLOTS/processed_data_t10.png)
 
+#### Mean and Standard scaling
+
+For what concerns the mean, it is a simple translation and it will do no harm. Of course once the data is fully processed then, one can translate it back.
+
+For what concerns the division by variance the phsiscal interpretation of it requires a bit more care since after log scale the order of magnitude of the variables is the same.
+It can be summarized in the following way:
+- PCA on data not divided by variance -> components of maxixmum variabiliy in the teh dataset, I am finding the eigenvalues and eigenvectors of the matrix of covariance.
+- PCA on data divided by variance -> components of maximux correlation. I am finding the components that correlates, regardless of its individual variability
 
 ## 3. Classical PCA Analysis
 
@@ -152,3 +160,5 @@ The above plot in which I was comparing hosvd and pca is fundamentally WRONG. I 
 # Proof of equivalence in PC loadings between PCA and HOSVD
 
 ![PCA vs HOSVD modes dynamics](./proof.jpeg)
+
+# A bit desperate, I go on a private repo to run some stuff, I will be working non stop until deadline. DO not esistate to contact me via email/teams
