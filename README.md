@@ -78,33 +78,6 @@ where:
 - **Σ** contains the singular values (related to variance explained)
 - **V** contains the loadings (contribution of each species to each mode)
 
-### Species Contributions to Principal Components
-
-| Mode | 1st Species | 2nd Species | 3rd Species | 4th Species | 5th Species | 6th Species | 7th Species | 8th Species |
-|------|-------------|-------------|-------------|-------------|-------------|-------------|-------------|-------------|
-| 1 | YH₂O₂ (12.5%) | YHO₂ (12.5%) | YH₂O (12.5%) | YOH (12.5%) | YO₂ (12.5%) | YO (12.5%) | YH₂ (12.5%) | YH (12.5%) |
-| 2 | YH₂O (17.7%) | YO (17.6%) | YH₂ (17.2%) | YHO₂ (17.2%) | YH₂O₂ (7.7%) | YH (7.7%) | YO₂ (7.4%) | YOH (7.4%) |
-| 3 | YOH (18.5%) | YO₂ (18.4%) | YH (16.2%) | YH₂O₂ (16.2%) | YHO₂ (8.8%) | YH₂ (8.8%) | YH₂O (6.6%) | YO (6.6%) |
-| 4 | YH₂O₂ (22.5%) | YH (22.4%) | YH₂O (12.3%) | YO (12.2%) | YO₂ (9.0%) | YOH (8.9%) | YH₂ (6.4%) | YHO₂ (6.4%) |
-| 5 | YO (14.5%) | YH₂O (14.3%) | YH (13.3%) | YH₂O₂ (13.2%) | YO₂ (11.8%) | YOH (11.7%) | YHO₂ (10.6%) | YH₂ (10.5%) |
-| 6 | YH₂ (17.2%) | YHO₂ (16.7%) | YOH (15.7%) | YO₂ (15.5%) | YH (13.4%) | YH₂O₂ (13.2%) | YO (4.4%) | YH₂O (3.9%) |
-| 7 | YHO₂ (18.4%) | YH₂ (18.3%) | YO (16.4%) | YH₂O (15.9%) | YH₂O₂ (9.0%) | YH (8.8%) | YO₂ (7.2%) | YOH (6.1%) |
-| 8 | YOH (19.3%) | YO₂ (19.0%) | YH₂O (16.7%) | YO (15.9%) | YHO₂ (10.7%) | YH₂ (10.0%) | YH₂O₂ (4.3%) | YH (4.1%) |
-
-### Variance Explained
-
-The variance captured by the principal components quantifies how much information each mode contains (non bene!):
-
-![PCA Variance Explained](README_PLOTS/pca_variance_explained.png)
-
-
-### Spatial Patterns
-
-![PCA Spatial Mode 1](README_PLOTS/pca_spatial_modes_all.png)
-
-### 4. Check with PARENTE
-
-Ah beh per questo bisogna che o aspetti o organizzi un meeting
 
 ## 5. HOSVD (Higher-Order Singular Value Decomposition)
 
