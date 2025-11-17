@@ -2,9 +2,7 @@
 
 ## Overview
 
-Sostanzialmente non ho tempo per fare la documentazione in due lingue e il paper, questa doc e' una sorta di placeholder raffazzonato su per sapere cosa faccio ogni volta che torno a lavorare sul progetto.
-
-Inoltre lavorando in solitaria mi da una idea chiara della direzione che sta prendendo sto progetto (il fine ultimo), che detto francamente sta cambiando troppo troppo spesso per una roba che scade fra due giorni.
+The focus of the work is now comparing HOSVD to PCA in combustion. Tensorial methods  decomposes multi-dimensional combustion data into orthogonal modes that capture spatial patterns, temporal evolution, and chemical species interactions, whereas traditional PCA con only focus on a specific dimension. 
 
 ## 1. Data Acquisition
 Data is taken from BLASTNET at the following link:
@@ -17,38 +15,37 @@ Each simulation provides:
 - Temporal snapshots: 200 time steps
 - Chemical species: 8 tracked species (H, H₂, O, O₂, OH, H₂O, HO₂, H₂O₂)
 
+![Original Data at Time Step 10](README_PLOTS/original_data_t10.png)
+
 ## 2. Data Preprocessing
 
 ### Spatial Subsampling
 In order to have the code run fast and test without losing too much time transfering everything on CESVIMA, the data is reduced heavily.
 
 - Original grid: 1600 × 2000 points
-- Subsampled grid: 200 × 160 points (10× reduction in each direction)
+- Subsampled grid: 320 × 400 points (5× reduction in each direction)
 
 ### Mass to Molar Fraction Conversion
 
-A me interessa la chimica e se vedo qualcosa sicuramente non e' dovuto a come si muovono le masse, ma piuttosto a cosa reagisce con cosa. Dividento ciascuna specie per la massa molare ottengo la concentrazione.
+Mass fractions are converted to molar fractions by dividing by species-specific molar masses, I wanna watch the chemistry process, so I want moles. If I keep mass concentration the prevalent modes are not the species which are most involved in chemical reactions, but the heavier ones (learned this at my own expense :( )
+
 
 ### Data Processing
 
-E' un bordello e la gente che si occupa di combustione e' un po' criptica e tratta la cosa in maniera  euristica, ossia ne prova qualcuna e va con metriche di ricostruzione. Questo approccio a me non piace tanto e ho buttato tempo a ragionare sulle trasformazioni.
+For the moment the only processing that I am making is logarithmic scaling to make sure that all variables are more on less on the same order of magnitude. I am not fully convinced about centering, usually PCA requires it, but I am working with quantities in the same domain and I don't want negative concentrations or masses (although in the log domain might be a good idea). 
 
-#### Log
+This stuff is really important because the results are higly dependent on it. For the moment:
+- log10 scale (ONLY!)
 
-La logaritmica e' la piu' convincente di tutte. Le concentrazioni di specie chimiche vivono in uno spazio la cui piu' diretta rappresentazione e' quella logaritmica, sono a diversi ordini di grandezza e le cose non si sommano, ma bensi' moltilicano. Inoltre la trasformazione logaritmica e' supportata anche dal paper figo di Parente (e non solo), quindi sei proprio sicuro che vada bene.
+### Visualization
 
-Riassumendo: sul logaritmo siamo contenti, va bene
+The plot displayed below shows data before and after beeing processed
+
+![Original Data at Time Step 10](README_PLOTS/data_comparison.png)
 
 #### Mean and Standard scaling
 
-Questo discorso e' decisamente piu' complicato e richiede un'analisi un po' piu' sottile. Per quando riguarda lo std scaling lascio la spiegazione che ho fatto per l'inglese che va bene.
-
-For what concerns the division by variance the phsiscal interpretation of it requires a bit more care since after log scale the order of magnitude of the variables is the same.
-It can be summarized in the following way:
-- PCA on data not divided by variance -> components of maxixmum variabiliy in the teh dataset, I am finding the eigenvalues and eigenvectors of the matrix of covariance.
-- PCA on data divided by variance -> components of maximux correlation. I am finding the components that correlates, regardless of its individual variability
-
-Per il centering (mean scaling) sembrava una cagata, pero' a causa della forte struttura spaziotemporale della fiamma a H2 effettivamente importa se la media e' overall, temporale o spaziale. Spaziale fa si che il dataset sia meno suscettibile agli effetti di bordo della fiamma. Mi concentro sulle variazioni. Media totale e' l'approccio piu' agnostico, ma forse un po meno sensato, il grosso plus e' che la media totale non cambia proprio nulla nulla dei dati, quella temporale forse un pochetto si.
+Data is further processed by subtracting the mean to focus on fluctuations. Division from standard deviation is used to make sure that majority species (which still tend to oscillate the most even after log transform) fo not dominate the algorithm due to this fact
 
 ## 3. Classical PCA Analysis
 
@@ -91,14 +88,10 @@ The decomposition is computed by:
 2. Computing the core tensor via multi-mode dot product (tensorly)
 3. The core tensor G captures the interactions between spatial patterns, chemical species, and temporal evolution
 
-### Reconstruction Accuracy
-
-The HOSVD decomposition achieves excellent reconstruction accuracy:
-- **Relative reconstruction error**: 2.00e-15 (stability)
 
 ### Core Tensor Singular Values
 
-The core tensor singular values reveal the importance of each mode across different dimensions:
+The core tensor generalized singular values reveal the importance of each mode across different dimensions:
 
 ![HOSVD Core Tensor Singular Values ](README_PLOTS/hosvd_core_vals.png)
 **CORE ** HOSVD core tensor singular values across spatial, chemical, and temporal modes.
@@ -107,13 +100,15 @@ The core tensor singular values reveal the importance of each mode across differ
 - **Chemical Dimension**: This is the term of comparison (qua c'e' la ciccia, ma e' tardi e lo faccio domani)
 - **Time Dimension**: Shows distinct temporal mode importance, with the first few modes capturing most of the temporal dynamics
 
+## Comparison of the methods
 
-## Matematica
+As shown in the paper the methods obtain exactly the same singular value decay in the chemical direction
 
-Le dimostrazioni matematiche di equivalenza sono in latex, non c'e' dubbio che mi metta ora a cosi' poco dalla scandenza a scriverle anche in md.
+![Singular values comparison ](README_PLOTS/sing_vals_comparison.png)
 
-## Considerazione sui due metodi
 
-In sostanza se mi metto a guardare una compoennte per volta ottengo che HOSVD e' esattamente uguale a PCA. Questa cosa non fa tanto piacere perche' toglie importanza all'algoritmo, pero' guardando il lato positivo significa anche che dato che PCA e' contenuta dentro HOSVD e gli algoritmi sono computazionalmente risibili HOSVD e' strettamente migliore di PCA.
+And the same loadings (i.e. species content of PCA modes and U_chem cols)
 
-La differenza sostanziale fra i due algoritmi sta nel core tensor. Per construzione gli elementi del core tensor cattura interazioni fra PC calcolate lungo diversi assi del tensore. 
+![HOSVD and PCA loadings ](README_PLOTS/loadings_comparison.png)
+
+
