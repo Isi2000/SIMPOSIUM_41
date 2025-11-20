@@ -111,4 +111,8 @@ And the same loadings (i.e. species content of PCA modes and U_chem cols)
 
 ![HOSVD and PCA loadings ](README_PLOTS/loadings_comparison.png)
 
+## Compression comparison
+
+Compression is assessed by fixing the energy truncation level of PCA. Since PCA truncate only in the chemical direction the plot will show a monotonically lower reconstruction error of PCA over HOSVD, but the main takeaway is that the two model have different orders of magnitude
+
 
